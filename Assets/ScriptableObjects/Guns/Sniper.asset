@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fa6fb192e4d6af4181ea8763fc35a41, type: 3}
+  m_Name: Sniper
+  m_EditorClassIdentifier: 
+  Name: Sniper
+  damage: 50
+  burst: 0
+  firerate: 0.6
+  shootForce: 700
+  bloom: 0
+  recoil: 2
+  sideRecoil: 0.5
+  kickback: 0.2
+  aimSpeed: 10
+  lerpSpeed: 0.01
+  bobIntensity: 0.01
+  bobSpeed: 3
+  sprintIntensity: 0
+  sprintSpeed: 3
+  ZoomFov: 3
+  rounds: 10
+  bulletAmount: 1
+  reloadTime: 4
+  prefab: {fileID: 5804263149342259977, guid: 8329a676ba5aa294db15428e984a95d2, type: 3}
