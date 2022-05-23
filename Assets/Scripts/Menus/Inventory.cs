@@ -23,7 +23,7 @@ public class Inventory : MonoBehaviourPun
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.I))
         {
             menu.SetActive(!menu.activeSelf);
 

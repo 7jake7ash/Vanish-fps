@@ -16,6 +16,11 @@ TagManager:
   - ShopItem
   - Dead
   - Target
+  - Bullet
+  - Item
+  - Death
+  - PlrMan
+  - Countdown
   layers:
   - Default
   - TransparentFX
@@ -32,10 +37,10 @@ TagManager:
   - HitBox
   - MyPlayer
   - MyGun
-  - 
-  - 
-  - 
-  - 
+  - Player1
+  - Player2
+  - Bullet1
+  - Bullet2
   - 
   - 
   - 

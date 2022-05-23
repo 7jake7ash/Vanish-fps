@@ -129,6 +129,7 @@ MonoBehaviour:
   rb: {fileID: 4389815523744131397}
   bulletHitPrefab: {fileID: 0}
   hitMarker: {fileID: 0}
+  audioSource: {fileID: 0}
   damage: 0
   view: {fileID: 0}
 --- !u!96 &7969129431974089135

@@ -16,18 +16,21 @@ MonoBehaviour:
   damage: 40
   burst: 1
   firerate: 0.15
-  shootForce: 50
-  bloom: 1
-  recoil: 0.3
-  sideRecoil: 0.2
+  shootForce: 65
+  bloom: 3
+  aimBloom: 0
+  recoil: 0.25
+  sideRecoil: 0.15
+  modelRecoil: 0.5
   kickback: 0.03
-  aimSpeed: 8
+  aimSpeed: 20
   lerpSpeed: 0.007
   bobIntensity: 0.01
   bobSpeed: 2.5
-  sprintIntensity: 0.3
+  sprintIntensity: 0
   sprintSpeed: 4
   ZoomFov: 1.5
+  zoomSpeed: 8
   rounds: 100
   bulletAmount: 1
   reloadTime: 4

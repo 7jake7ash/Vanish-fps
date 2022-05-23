@@ -15,19 +15,22 @@ MonoBehaviour:
   Name: SMG
   damage: 15
   burst: 1
-  firerate: 0.1
-  shootForce: 600
-  bloom: 1
-  recoil: 0.7
-  sideRecoil: 0.4
-  kickback: 0.05
-  aimSpeed: 10
-  lerpSpeed: 0.007
+  firerate: 0.06
+  shootForce: 800
+  bloom: 3
+  aimBloom: 0
+  recoil: 0.8
+  sideRecoil: 0.25
+  modelRecoil: 0.5
+  kickback: 0.03
+  aimSpeed: 22
+  lerpSpeed: 0.005
   bobIntensity: 0.01
   bobSpeed: 4
-  sprintIntensity: 0.1
+  sprintIntensity: 0
   sprintSpeed: 4
   ZoomFov: 1.5
+  zoomSpeed: 8
   rounds: 70
   bulletAmount: 1
   reloadTime: 2

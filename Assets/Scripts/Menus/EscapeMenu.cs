@@ -28,7 +28,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (photonView.IsMine && Input.GetKeyDown(KeyCode.Escape))
         {
             menu.SetActive(!menu.activeSelf);
             optionsMenu.SetActive(false);
@@ -57,10 +57,10 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
 
     public void LeaveRoom()
     {
-        Destroy(RoomManager.Instance.gameObject);
+        //Destroy(RoomManager.Instance.gameObject);
         Debug.Log("left");
-        PhotonNetwork.LoadLevel(0);
         PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel(0);
     }
 
 

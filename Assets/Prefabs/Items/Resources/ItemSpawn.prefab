@@ -43,5 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d5cc28164dee6c4e8fb558f6ffd2ac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartGun: {fileID: 6832607108832246357, guid: f3d04951f815e7b4d98c6ecc7fae9140,
-    type: 3}
+  StartGun:
+  - {fileID: 2587940294768526118, guid: 845c6b267e5216347b75e60795447b38, type: 3}
+  - {fileID: 7329355352261930686, guid: ed56496bfe3c6d5418ef674508e2b0ec, type: 3}
+  - {fileID: 6625755313034427731, guid: 745408a9e5bf00641984ba58c75575b8, type: 3}
+  - {fileID: 6832607108832246357, guid: f3d04951f815e7b4d98c6ecc7fae9140, type: 3}
+  - {fileID: 6832607108832246357, guid: cbbfb4c5384ed0649b8c0d4a6408fa94, type: 3}
+  - {fileID: 5146953474379908808, guid: 17e86ba87dc29384484cc08692d34855, type: 3}

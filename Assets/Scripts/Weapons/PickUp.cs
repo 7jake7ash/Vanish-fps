@@ -8,6 +8,7 @@ public class PickUp : MonoBehaviourPunCallbacks
 {
     [Header("Prefab")]
     public GameObject prefab;
+    public GameObject Model;
     float throwForce = 5;
 
     private GameObject newPrefab;
@@ -30,12 +31,15 @@ public class PickUp : MonoBehaviourPunCallbacks
             canEquip = false;
 
             playerView = otherColl.gameObject.GetComponent<PhotonView>();
+
             if (playerView.IsMine && !SlotFull)
             {
                 Container = otherColl.transform.Find("Recoil/CameraHolder/itemContainer");
                 if (Container.childCount <= 1)
                 {
                     SlotFull = true;
+
+                    otherColl.gameObject.GetComponent<PickUpMenu>().menu.SetActive(false);
 
                     newPrefab = PhotonNetwork.Instantiate(prefab.name, transform.position, Quaternion.identity);
         
@@ -64,6 +68,15 @@ public class PickUp : MonoBehaviourPunCallbacks
     {
         photonView.RPC("Spawn", RpcTarget.MasterClient, otherColl.gameObject.GetComponent<PhotonView>().ViewID);
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Death"))
+        {
+            Destroy(other.gameObject);
+        }
+    }
+
     public void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player") && other.transform.GetComponent<PhotonView>().IsMine)

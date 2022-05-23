@@ -16,6 +16,9 @@ public class Options : MonoBehaviourPun
     public Slider hSlider;
     public Slider aSlider;
     public Slider fovSlider;
+    public TMP_Text vText;
+    public TMP_Text hText;
+    public TMP_Text aText;
     public TMP_Text fovText;
     Resolution[] resolutions;
     
@@ -36,6 +39,9 @@ public class Options : MonoBehaviourPun
 
         resolutionDropdown.ClearOptions();
 
+        vText.text = vSlider.value.ToString();
+        hText.text = hSlider.value.ToString();
+        aText.text = aSlider.value.ToString();
         fovText.text = fovSlider.value.ToString();
 
         List<string> options = new List<string>();
@@ -65,6 +71,9 @@ public class Options : MonoBehaviourPun
         //send to controller
         verticalSens = PlayerPrefs.GetFloat("vSens", 3);
         playerController.vSensitivity = verticalSens;
+
+        //set text
+        vText.text = vSlider.value.ToString();
     }
 
     public void hSens(float hValue)
@@ -76,6 +85,9 @@ public class Options : MonoBehaviourPun
         //send to controller
         horizontalSens = PlayerPrefs.GetFloat("hSens", 100);
         playerController.hSensitivity = horizontalSens;
+
+        //set text
+        hText.text = hSlider.value.ToString();
     }
 
     public void aSens(float aValue)
@@ -87,6 +99,9 @@ public class Options : MonoBehaviourPun
         //send to controller
         aimSens = PlayerPrefs.GetFloat("aimSens", 3);
         playerController.aimSensitivity = aimSens;
+
+        //set text
+        aText.text = aSlider.value.ToString();
     }
 
     public void SetQuality(int qualityIndex)
@@ -107,10 +122,6 @@ public class Options : MonoBehaviourPun
 
     public void ChangeFOV(float value)
     {
-        Debug.LogError(photonView.Owner.NickName);
-            
-        Debug.LogError(value);
-        
         //save
         PlayerPrefs.SetFloat("FOV", value);
         PlayerPrefs.Save();

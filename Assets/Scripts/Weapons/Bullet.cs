@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     public Rigidbody rb;
     public GameObject bulletHitPrefab;
     public GameObject hitMarker;
+    public AudioSource audioSource;
 
     private EnemyHealth enemyHealth;
     private HealthBar health;
@@ -34,22 +35,27 @@ public class Bullet : MonoBehaviour
         if (view.IsMine)
         {
             //Body Shot
-            if (collision.collider.gameObject.CompareTag("Body") && !collision.collider.transform.parent.GetComponentInParent<PhotonView>().IsMine)
+            if (collision.collider.gameObject.CompareTag("Body") && !collision.collider.GetComponent<Outline>().playerController.GetComponent<PhotonView>().IsMine)
             {
-                health = collision.transform.parent.parent.GetComponent<HealthBar>();
-                health.hitMarker = hitMarker;
-                hitMarker.SetActive(true);
-                
+                //health = collision.transform.parent.parent.parent.GetComponent<HealthBar>();
+                health = collision.collider.GetComponent<Outline>().playerController.GetComponent<HealthBar>();
+                //health.hitMarker = hitMarker;
+                //hitMarker.SetActive(true);
+
+                audioSource.Play();
+
                 Debug.Log(health);
                 health.Shot(damage);
                 //health.HitMarker(0.5f);
             }
             //Head Shot
-            if (collision.collider.gameObject.CompareTag("Head") && !collision.collider.transform.parent.GetComponentInParent<PhotonView>().IsMine)
+            if (collision.collider.gameObject.CompareTag("Head") && !collision.collider.GetComponent<Outline>().playerController.GetComponent<PhotonView>().IsMine)
             {
                 health = collision.transform.parent.parent.parent.GetComponent<HealthBar>();
-                health.hitMarker = hitMarker;
-                hitMarker.SetActive(true);
+                //health.hitMarker = hitMarker;
+                //hitMarker.SetActive(true);
+
+                audioSource.Play();
 
                 health.Shot(damage * 1.5f);
                 //health.HitMarker(0.5f);
@@ -69,6 +75,8 @@ public class Bullet : MonoBehaviour
             {
                 targetHealth = collision.collider.transform.GetComponent<TargetHealth>();
                 targetHealth.hitMarker = hitMarker;
+
+                audioSource.Play();
 
                 targetHealth.Shot(damage);
                 //targetHealth.HitMarker(0.5f);

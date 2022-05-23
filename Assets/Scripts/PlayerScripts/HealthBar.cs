@@ -14,6 +14,7 @@ public class HealthBar : MonoBehaviourPun
     public bool Dead = false;
     public LayerMask layer;
     public PlayerController playerController;
+    public AudioSource hitSound;
 
     //Gun
     Transform itemCont;
@@ -41,6 +42,8 @@ public class HealthBar : MonoBehaviourPun
         Health -= damage;
         
         Debug.Log(Health);
+
+        hitSound.Play();
 
         //Death
         if(Health <= 0)
@@ -79,7 +82,6 @@ public class HealthBar : MonoBehaviourPun
     public void death()
     {
         playersDead++;
-        Debug.LogError(playersDead);
 
         //gameObject.SetActive(false);
         Transform head = transform.Find("Recoil/CameraHolder/Head");
@@ -88,13 +90,47 @@ public class HealthBar : MonoBehaviourPun
 
         gameObject.tag = "Dead";
         head.tag = "Dead";
+        transform.Find("Model/Body").tag = "Dead";
 
-        if(playersDead == PhotonNetwork.PlayerList.Length - 1)
+        //Find Teams
+        int team0 = 0;
+        int team1 = 0;
+        int team2 = 0;
+
+        foreach (PhotonView plr in PhotonNetwork.PhotonViewCollection)
+        {
+            if (plr.gameObject.CompareTag("Player"))
+            {
+                if(plr.GetComponent<PlayerController>().plrManager.team == 0)
+                {
+                    team0++;
+                }
+                if(plr.GetComponent<PlayerController>().plrManager.team == 1)
+                {
+                    team1++;
+                }
+                if (plr.GetComponent<PlayerController>().plrManager.team == 2)
+                {
+                    team2++;
+                }
+            }
+        }
+        //One Player Left
+        if (team0 == 1 && team1 == 0 && team2 == 0)
         {
             playersDead = 0;
             Debug.LogError("Game Over");
             GameObject playerWon = GameObject.FindGameObjectWithTag("Player");
-            Debug.LogError(playerWon);
+            plrWonText.text = "Winner: " + playerWon.GetComponent<PhotonView>().Owner.NickName;
+            winScreen.gameObject.SetActive(true);
+            Invoke("StopGame", 7f);
+        }
+        //Other Team Dead
+        else if(team1 > 0 && team2 == 0 || team2 > 0 && team1 == 0)
+        {
+            playersDead = 0;
+            Debug.LogError("Game Over");
+            GameObject playerWon = GameObject.FindGameObjectWithTag("Player");
             plrWonText.text = "Winner: " + playerWon.GetComponent<PhotonView>().Owner.NickName;
             winScreen.gameObject.SetActive(true);
             Invoke("StopGame", 7f);
@@ -142,6 +178,7 @@ public class HealthBar : MonoBehaviourPun
         if(PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel(1);
+            PhotonNetwork.CurrentRoom.IsOpen = true;
         }
     }
 }

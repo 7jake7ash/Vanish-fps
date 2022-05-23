@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: Sniper
   m_EditorClassIdentifier: 
   Name: Sniper
-  damage: 50
+  damage: 75
   burst: 0
-  firerate: 0.6
-  shootForce: 700
-  bloom: 0
+  firerate: 1
+  shootForce: 1000
+  bloom: 5
+  aimBloom: 0
   recoil: 2
-  sideRecoil: 0.5
+  sideRecoil: 1.5
+  modelRecoil: 2
   kickback: 0.2
   aimSpeed: 10
   lerpSpeed: 0.01
@@ -27,8 +29,9 @@ MonoBehaviour:
   bobSpeed: 3
   sprintIntensity: 0
   sprintSpeed: 3
-  ZoomFov: 3
-  rounds: 10
+  ZoomFov: 2.5
+  zoomSpeed: 8
+  rounds: 7
   bulletAmount: 1
   reloadTime: 4
   prefab: {fileID: 5804263149342259977, guid: 8329a676ba5aa294db15428e984a95d2, type: 3}

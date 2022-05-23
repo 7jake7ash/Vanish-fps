@@ -11,8 +11,10 @@ public class Weapons : ScriptableObject
     public float firerate;
     public float shootForce;
     public float bloom;
+    public float aimBloom;
     public float recoil;                                    
     public float sideRecoil;
+    public float modelRecoil;
     public float kickback;
     public float aimSpeed;
     public float lerpSpeed;
@@ -21,6 +23,7 @@ public class Weapons : ScriptableObject
     public float sprintIntensity;
     public float sprintSpeed;
     public float ZoomFov;
+    public float zoomSpeed;
     public int rounds;
     public float bulletAmount;
     public float reloadTime;

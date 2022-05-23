@@ -6,10 +6,10 @@ using UnityEngine;
 public class StartGunSpawn : MonoBehaviourPun
 {
     [Header("PickUp")]
-    public GameObject StartGun;
+    public GameObject[] StartGun;
 
     void Start()
     {
-        PhotonNetwork.InstantiateRoomObject(StartGun.name, transform.position, Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(StartGun[Random.Range(0,StartGun.Length)].name, transform.position, Quaternion.identity);
     }
 }

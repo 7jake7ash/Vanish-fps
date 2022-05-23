@@ -42,7 +42,7 @@ public class BeginGame : MonoBehaviourPun
                 isPressed = true;
                 anyPressed = true;
                     
-                countdownTimer.SetStartTime();
+                //countdownTimer.SetStartTime();
 
                 PhotonNetwork.CurrentRoom.IsOpen = false;
 

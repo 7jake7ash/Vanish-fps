@@ -18,6 +18,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject joinRoomButton;
     [SerializeField] TMP_InputField RoomNameInput;
     [SerializeField] Button joinButton;
+
+    private List<RoomInfo> roomList;
+
     void Awake()
     {
         Instance = this;
@@ -113,18 +116,28 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
 
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    public override void OnRoomListUpdate(List<RoomInfo> list)
     {
-        foreach(Transform trans in roomListContent)
+        //Debug.LogError(roomList.Count);
+        roomList = list;
+        foreach (Transform trans in roomListContent)
         {
             Destroy(trans.gameObject);
         }
-        for(int i = 0; i < roomList.Count; i++)
+        //for(int i = 0; i < roomList.Count; i++)
+        //{
+        //    //if(!roomList[i].IsVisible) {return;}
+        //    if (roomList[i].RemovedFromList)
+        //    {
+        //        continue;
+        //    }
+        //    Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
+        //}
+        foreach (RoomInfo a in roomList)
         {
-            //if(!roomList[i].IsVisible) {return;}
-            if (roomList[i].RemovedFromList)
-                continue;
-            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
+            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(a);
         }
+
+        base.OnRoomListUpdate(roomList);
     }
 }

@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CountdownTimer.cs" company="Exit Games GmbH">
 //   Part of: Photon Unity Utilities,
 // </copyright>
@@ -66,8 +66,10 @@ namespace Photon.Pun.UtilityScripts
         {
             Debug.Log("OnEnable CountdownTimer");
             base.OnEnable();
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            //Countdown = 5f;
+            photonView.RPC("UI", RpcTarget.All);
 
-            // the starttime may already be in the props. look it up.
             Initialize();
         }
 
@@ -101,7 +103,7 @@ namespace Photon.Pun.UtilityScripts
         private void OnTimerEnds()
         {
             this.isTimerRunning = false;
-            
+            this.enabled = false;
 
             Debug.Log("Emptying info text.", this.Text);
             this.Text.text = string.Empty;
@@ -109,14 +111,11 @@ namespace Photon.Pun.UtilityScripts
             if (OnCountdownTimerHasExpired != null) OnCountdownTimerHasExpired();
 
             //Start Game
-            GetComponent<BeginGame>().StartGame();
-        }
-
-        [PunRPC]
-        public void destroy() 
-        {
-            Debug.LogError("Destroy");
-            PhotonNetwork.DestroyAll();
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Debug.LogError("load scene" + index);
+                PhotonNetwork.LoadLevel(index);
+            }
         }
 
         public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
@@ -130,11 +129,11 @@ namespace Photon.Pun.UtilityScripts
             int propStartTime;
             if (TryGetStartTime(out propStartTime))
             {
-                this.startTime = propStartTime;
+                this.startTime = PhotonNetwork.ServerTimestamp;
                 Debug.Log("Initialize sets StartTime " + this.startTime + " server time now: " + PhotonNetwork.ServerTimestamp + " remain: " + TimeRemaining());
-
+                
                 this.isTimerRunning = TimeRemaining() > 0;
-
+                Debug.LogError(isTimerRunning);
                 if (this.isTimerRunning)
                     OnTimerRuns();
                 else
@@ -144,7 +143,7 @@ namespace Photon.Pun.UtilityScripts
 
         private float TimeRemaining()
         {
-            int timer = PhotonNetwork.ServerTimestamp - this.startTime;
+            int timer = PhotonNetwork.ServerTimestamp - this.startTime;// Fix This!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             return this.Countdown - timer / 1000f;
         }
 
@@ -161,14 +160,14 @@ namespace Photon.Pun.UtilityScripts
 
             return false;
         }
-
+        
         public void SetStartTime()
         {
             int startTime = 0;
             bool wasSet = TryGetStartTime(out startTime);
-
-            photonView.RPC("UI", RpcTarget.All);
-
+            
+            //photonView.RPC("UI", RpcTarget.All);/////////////////////////////////////////////////////////////////////////////// Turns on UI
+            
             Hashtable props = new Hashtable
             {
                 {CountdownTimer.CountdownStartTime, (int)PhotonNetwork.ServerTimestamp}
@@ -178,7 +177,7 @@ namespace Photon.Pun.UtilityScripts
 
             Debug.Log("Set Custom Props for Time: "+ props.ToStringFull() + " wasSet: "+wasSet);
         }
-
+        
         [PunRPC]
         public void UI()
         {

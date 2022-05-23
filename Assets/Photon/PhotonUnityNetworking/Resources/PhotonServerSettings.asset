@@ -75,6 +75,16 @@ MonoBehaviour:
   - setParent
   - destroy
   - FOV
+  - playAudio
+  - VisItem
+  - PlayAudio
+  - resetPickup
+  - TeamColorChange
+  - setTeam
+  - dontDestroy
+  - changeColor
+  - bulletType
+  - TeamChange
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -17,11 +17,19 @@ MonoBehaviour:
   burst: 1
   firerate: 0.1
   shootForce: 300
-  bloom: 0.01
+  bloom: 3
+  aimBloom: 0
   recoil: 10
+  sideRecoil: 0
   kickback: 10
   aimSpeed: 10
+  lerpSpeed: 0
+  bobIntensity: 0
+  bobSpeed: 0
+  sprintIntensity: 0
+  sprintSpeed: 0
   ZoomFov: 0
+  zoomSpeed: 0
   rounds: 50
   bulletAmount: 1
   reloadTime: 1.5

@@ -35,7 +35,7 @@ public class StartGame : MonoBehaviourPun
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                timer.SetStartTime();
+                //timer.SetStartTime();
 
                 photonView.RPC("SetUp", RpcTarget.All);
             }

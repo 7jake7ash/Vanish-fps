@@ -4830,7 +4830,7 @@ GameObject:
   - component: {fileID: 5531474221345797682}
   m_Layer: 0
   m_Name: ShardPickup
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4863,6 +4863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 7590003324532416131, guid: e04a134b017a2574d9e2969c5580b52c, type: 3}
+  Model: {fileID: 4616693796732482405}
   canEquip: 0
 --- !u!65 &6343505737076635398
 BoxCollider:
@@ -4875,7 +4876,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.7522107, y: 1.1866647, z: 1.8602453}
+  m_Size: {x: 6, y: 6, z: 6}
   m_Center: {x: -0.2009781, y: -0.09333241, z: 0.3459335}
 --- !u!114 &6515628398025324123
 MonoBehaviour:
@@ -4912,9 +4913,9 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!1 &7733517667764143642
 GameObject:
   m_ObjectHideFlags: 0
@@ -4925,9 +4926,9 @@ GameObject:
   m_Component:
   - component: {fileID: 963494839146340415}
   - component: {fileID: 689169102344009619}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4940,7 +4941,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7733517667764143642}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.25}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 3198171928838896628}
@@ -4957,7 +4958,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.5, y: 1, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8442578810778428644
 GameObject:
@@ -4968,7 +4969,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3198171928838896628}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Design
   m_TagString: Untagged
   m_Icon: {fileID: 0}

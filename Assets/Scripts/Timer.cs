@@ -18,6 +18,7 @@ using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun.UtilityScripts;
+using System.Collections.Generic;
 
 namespace Photon.Pun.UtilityScripts
 {
@@ -43,39 +44,49 @@ namespace Photon.Pun.UtilityScripts
         public const string CountdownStartTime = "StartTime";
 
         [Header("Countdown time in seconds")]
-        public float Countdown = 100.0f;
+        public float Countdown = 50f;
 
         public bool isTimerRunning;
 
-        private int startTime;
+        public int startTime;
 
         public Material mat;
 
         [Header("Reference to a Text component for visualizing the countdown")]
         public Text Text;
 
+        public GameObject image;
 
         /// <summary>
         ///     Called when the timer has expired.
         /// </summary>
         public static event CountdownTimerHasExpired OnCountdownTimerHasExpired;
 
+        int Team;
+
         public void Start()
         {
-            if (this.Text == null) Debug.LogError("Reference to 'Text' is not set. Please set a valid reference.", this);
-            if (PhotonNetwork.IsMasterClient)
-            {
-                SetStartTime();
-            }
+            
         }
         
         public override void OnEnable()
         {
-            Debug.Log("OnEnable CountdownTimer");
+            Debug.LogError("OnEnable CountdownTimer");
             base.OnEnable();
 
-            // the starttime may already be in the props. look it up.
+            //textObject.SetActive(true);
+            //image.SetActive(true);
+
+            //the starttime may already be in the props. look it up.
             Initialize();
+
+            foreach (PhotonView plrMan in PhotonNetwork.PhotonViewCollection)
+            {
+                if (plrMan.gameObject.CompareTag("PlrMan") && plrMan.GetComponent<PhotonView>().IsMine)
+                {
+                    Team = plrMan.GetComponent<PlayerManager>().team;
+                }
+            }
         }
 
         public override void OnDisable()
@@ -84,15 +95,26 @@ namespace Photon.Pun.UtilityScripts
             Debug.Log("OnDisable CountdownTimer");
         }
 
-
         public void Update()
         {
-            if (!this.isTimerRunning) return;
+            if (!this.isTimerRunning)
+            {
+                //Wait for all Players
+                //if (GameObject.FindGameObjectsWithTag("Player").Length == PhotonNetwork.PlayerList.Length)
+                //{
+                //    Initialize();
+                //}
+
+                return;
+            }
 
             float countdown = TimeRemaining();
-            this.Text.text = string.Format(countdown.ToString("n0"));
+            //this.Text.text = string.Format(countdown.ToString("n0"));
+            image.transform.localScale = new Vector3(countdown * .1f, 1, 1);
 
             if (countdown > 0.0f) return;
+
+            countdown = Countdown;
 
             OnTimerEnds();
         }
@@ -104,39 +126,47 @@ namespace Photon.Pun.UtilityScripts
         }
 
         private void OnTimerEnds()
-        {
-            isTimerRunning = false;
+        {   
+            this.isTimerRunning = false;
             this.enabled = false;
+            image.SetActive(false);
+
+
+            //Debug.Log("Emptying info text.", this.Text);
+            //this.Text.text = string.Empty;
+
+            if (OnCountdownTimerHasExpired != null) OnCountdownTimerHasExpired();
+
+            foreach (PhotonView plr in PhotonNetwork.PhotonViewCollection)
+            {
+                if (plr.gameObject.CompareTag("Player") && !plr.GetComponent<PhotonView>().IsMine && plr.GetComponent<PlayerController>().plrManager.team != 0 && Team == plr.GetComponent<PlayerController>().plrManager.team)
+                {
+                    plr.transform.Find("Recoil/CameraHolder/Head").gameObject.tag = "Dead";
+                    plr.transform.Find("Model/Body").gameObject.tag = "Dead";
+
+                    plr.GetComponent<TeamColor>().headOutline.OutlineMode = Outline.Mode.OutlineAndSilhouette;
+                    plr.GetComponent<TeamColor>().outline.OutlineMode = Outline.Mode.OutlineAndSilhouette;
+                }
+            }
 
             photonView.RPC("SetVisabilty", RpcTarget.All, true);
-
-            //if (rescueShip.plrsLeft < 2 && this.isTimerRunning)
-            //{
-            //    rescueShip.addPlrs = 0;
-            //    rescueShip.Reset();
-            //    this.isTimerRunning = false;
-            //    this.enabled = false;
-
-            //    Debug.Log("Emptying info text.", this.Text);
-            //    this.Text.text = string.Empty;
-            
-            //    if (OnCountdownTimerHasExpired != null) OnCountdownTimerHasExpired();
-
-            //    EndGame();
-            //}
         }
         [PunRPC]
         void SetVisabilty(bool on)
         {
-            foreach(PhotonView plr in PhotonNetwork.PhotonViewCollection)
+            //textObject.SetActive(!on);
+            //image.SetActive(!on);
+
+            foreach (PhotonView plr in PhotonNetwork.PhotonViewCollection)
             {
                 if (plr.gameObject.CompareTag("Player"))
                 {
                     GameObject plrObject = PhotonNetwork.GetPhotonView(plr.ViewID).gameObject;
                     Debug.LogWarning(plrObject);
                     plrObject.transform.Find("Recoil/CameraHolder/Head").gameObject.GetComponent<MeshRenderer>().enabled = on;
-                    plrObject.transform.Find("Model").gameObject.SetActive(on);
-                    plrObject.transform.Find("Recoil/CameraHolder/itemContainer").gameObject.SetActive(true);
+                    plrObject.transform.Find("Model/Body").gameObject.GetComponent<MeshRenderer>().enabled = on;
+                    //plrObject.transform.Find("Model/VanishPlayer/Cube").gameObject.GetComponent<MeshRenderer>().enabled = on;
+                    plrObject.transform.Find("Recoil/CameraHolder/itemContainer").gameObject.SetActive(on);
                     //mat.SetVector("MaxTime", new Vector2(1, 0));
                     //Invoke("StopDissovle", 1f);
                 }
@@ -149,8 +179,9 @@ namespace Photon.Pun.UtilityScripts
 
         void EndGame()
         {
-            gameObject.SetActive(false);
-            
+            //textObject.SetActive(false);
+            image.SetActive(false);
+
             Debug.Log("end game");
 
             PhotonNetwork.LoadLevel(1);
@@ -164,23 +195,21 @@ namespace Photon.Pun.UtilityScripts
             Initialize();
         }
 
-
         private void Initialize()
         {
-            int propStartTime;
-            if (TryGetStartTime(out propStartTime))
-            {
-                this.startTime = propStartTime;
+            //int propStartTime;
+            //if (TryGetStartTime(out propStartTime))
+            //{
+                this.startTime = PhotonNetwork.ServerTimestamp;
                 Debug.Log("Initialize sets StartTime " + this.startTime + " server time now: " + PhotonNetwork.ServerTimestamp + " remain: " + TimeRemaining());
 
-
                 this.isTimerRunning = TimeRemaining() > 0;
-
+                
                 if (this.isTimerRunning)
                     OnTimerRuns();
                 else
                     OnTimerEnds();
-            }
+            //}
         }
 
 
@@ -206,19 +235,31 @@ namespace Photon.Pun.UtilityScripts
         }
 
 
-        public void SetStartTime()
+        public void SetVis(int plr)
         {
-            int startTime = 0;
-            bool wasSet = TryGetStartTime(out startTime);
+            //int startTime = 0;
+            //bool wasSet = TryGetStartTime(out startTime);
 
-            Hashtable props = new Hashtable
-            {
-                //{CountdownTimer.CountdownStartTime, (int)PhotonNetwork.ServerTimestamp}
-            };
-            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+            //Hashtable props = new Hashtable
+            //{
+            //    {CountdownTimer.CountdownStartTime, (int)PhotonNetwork.ServerTimestamp}
+            //};
+            //PhotonNetwork.CurrentRoom.SetCustomProperties(props);
 
+            //Debug.Log("Set Custom Props for Time: " + props.ToStringFull() + " wasSet: " + wasSet);
 
-            Debug.Log("Set Custom Props for Time: " + props.ToStringFull() + " wasSet: " + wasSet);
+            photonView.RPC("VisItem", RpcTarget.All, plr);
+        }
+        [PunRPC]
+        public void VisItem(int plrID)
+        {
+            GameObject plr = PhotonNetwork.GetPhotonView(plrID).gameObject;
+
+            //plr.transform.Find("Recoil/CameraHolder/Head").gameObject.GetComponent<MeshRenderer>().enabled = false;
+            plr.transform.Find("Model/VanishPlayer/Cube").gameObject.GetComponent<MeshRenderer>().enabled = false;
+            plr.transform.Find("Model/Body").gameObject.GetComponent<MeshRenderer>().enabled = false;
+            plr.transform.Find("Recoil/CameraHolder/Head").gameObject.GetComponent<MeshRenderer>().enabled = false;
+            plr.transform.Find("Recoil/CameraHolder/itemContainer").gameObject.SetActive(false);
         }
     }
 }
