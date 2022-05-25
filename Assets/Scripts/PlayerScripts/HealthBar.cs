@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviourPun
 {
@@ -26,6 +27,7 @@ public class HealthBar : MonoBehaviourPun
 
     public TMP_Text plrWonText;
     public GameObject hitMarker;
+    public GameObject hitUI;
 
     Vector3 PlrPos;
 
@@ -37,11 +39,14 @@ public class HealthBar : MonoBehaviourPun
             Dead = false;
     }
 
+    private void FixedUpdate()
+    {
+        
+    }
+
     public void Shot(float damage)
     {
-        Health -= damage;
-        
-        Debug.Log(Health);
+        photonView.RPC("plrHealth", RpcTarget.AllBuffered, damage);
 
         hitSound.Play();
 
@@ -69,6 +74,20 @@ public class HealthBar : MonoBehaviourPun
 
             if (photonView.IsMine)
                 Dead = false;
+        }
+    }
+
+    [PunRPC]
+    void plrHealth(float damage)
+    {
+        Health -= damage;
+
+        if (photonView.IsMine)
+        {
+            Color color = hitUI.GetComponent<Image>().color;
+            color.a = 0.6f - Health * .01f;
+
+            hitUI.GetComponent<Image>().color = color;
         }
     }
     

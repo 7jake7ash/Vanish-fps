@@ -361,10 +361,13 @@ public class Gun : MonoBehaviourPun
         //Instantiate muzzle flash
         if (muzzleFlash != null)
         {
-            GameObject flash = Instantiate(muzzleFlash, barrelPoint.position + new Vector3(Random.Range(-.01f,.01f), Random.Range(-.01f, .01f), Random.Range(-.01f, .01f)), Quaternion.identity);
-            flash.transform.forward = -attackPoint.forward;
-            flash.transform.Rotate(Random.Range(-.01f, .01f), Random.Range(-.01f, .01f), Random.Range(-.01f, .01f));
-            Destroy(flash, 0.03f);
+            muzzleFlash.SetActive(true);
+            Invoke("Flash", 0.03f);
+            
+            //GameObject flash = Instantiate(muzzleFlash, barrelPoint.position + new Vector3(Random.Range(-.01f,.01f), Random.Range(-.01f, .01f), Random.Range(-.01f, .01f)), Quaternion.identity);
+            //flash.transform.forward = -attackPoint.forward;
+            //flash.transform.Rotate(Random.Range(-.01f, .01f), Random.Range(-.01f, .01f), Random.Range(-.01f, .01f));
+            //Destroy(flash, 0.03f);
         }
 
         bulletsLeft--;
@@ -410,6 +413,11 @@ public class Gun : MonoBehaviourPun
         }
 
         Destroy(currentBullet, 5f);
+    }
+
+    void Flash()
+    {
+        muzzleFlash.SetActive(false);
     }
 
     public void DropGun()
