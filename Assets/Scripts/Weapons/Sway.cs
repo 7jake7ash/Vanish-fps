@@ -66,7 +66,7 @@ public class Sway : MonoBehaviourPun
             idleCounter += Time.deltaTime * weapons.bobSpeed;
         }
         //Sprint
-        else if (playerController.Speed == 8 && !playerController.sliding)
+        else if (playerController.Speed == 8)
         {
             isSprinting = true;
             

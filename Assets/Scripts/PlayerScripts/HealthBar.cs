@@ -85,9 +85,10 @@ public class HealthBar : MonoBehaviourPun
         if (photonView.IsMine)
         {
             Color color = hitUI.GetComponent<Image>().color;
-            color.a = 0.6f - Health * .01f;
+            color.a = .5f - Health * .005f;
 
             hitUI.GetComponent<Image>().color = color;
+            Debug.LogError(hitUI.GetComponent<Image>().color);
         }
     }
     

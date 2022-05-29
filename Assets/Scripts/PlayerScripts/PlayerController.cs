@@ -33,7 +33,6 @@ public class PlayerController : MonoBehaviourPun
     bool canJump;
     bool canDoubleJump;
     bool crouching;
-    public bool sliding;
     bool forwardJump;
     bool justLeftGround;
     bool soundReady = true;
@@ -45,7 +44,6 @@ public class PlayerController : MonoBehaviourPun
     Vector3 velocity;
     Vector3 move;
     Vector3 jumpMove;
-    Vector3 slideMove;
 
     string jumpKey = "w";
 
@@ -110,21 +108,11 @@ public class PlayerController : MonoBehaviourPun
             cam.fieldOfView = fov;
         }
     }
-    void StopSlide()
-    {
-        sliding = false;
-    }
+
     void Move()
     {
         grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        //Crouch Toggle / Slide Toggle
-        if (Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftShift))
-        {
-            sliding = true;
-            slideMove = move;
-            Invoke("StopSlide", 3);
-        }
         if(Input.GetKeyDown(KeyCode.C) && !Input.GetKey(KeyCode.LeftShift))
         {
             crouching = !crouching;
@@ -132,12 +120,6 @@ public class PlayerController : MonoBehaviourPun
         if (grounded && velocity.y < 0)
         {
             velocity.y = -2.5f;
-        }
-        //Stop Slide
-        if(Input.GetKeyDown(KeyCode.C) && sliding && !Input.GetKey(KeyCode.LeftShift))
-        {
-            sliding = false;
-            crouching = false;
         }
         //Speed
         if(Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
@@ -164,19 +146,6 @@ public class PlayerController : MonoBehaviourPun
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        Debug.LogError(sliding);
-        //Sliding
-        if (sliding)
-        {
-            controller.height = 1f;
-            groundCheck.localPosition = new Vector3(0, 0, 0);
-            Speed = 8f;
-            //if (controller.velocity == Vector3.zero)
-            //{
-            //    sliding = false;
-            //}
-        }
-
         //Crouching
         if (crouching)
         {
@@ -196,11 +165,11 @@ public class PlayerController : MonoBehaviourPun
         }
 
         //Reset Height
-        if (!crouching || !sliding)
+        if (!crouching)
         {
             controller.height = Mathf.Lerp(controller.height, 2f, crouchSpeed);
         }
-        if(!crouching && !sliding) { groundCheck.localPosition = new Vector3(0, -0.78f, 0); }
+        if(!crouching) { groundCheck.localPosition = new Vector3(0, -0.7f, 0); }
         
         //Audio
         if(x != 0 || z != 0)
@@ -213,7 +182,7 @@ public class PlayerController : MonoBehaviourPun
             }
         }
 
-        if(grounded && !sliding)
+        if(grounded)
         {
             move = transform.right * x + transform.forward * z;
 
@@ -223,19 +192,13 @@ public class PlayerController : MonoBehaviourPun
 
             controller.Move(Speed * move * Time.deltaTime);
         }
-        else if(!grounded && !sliding)
+        else
         {
             Vector3 m = jumpMove + transform.right * x + transform.forward * z;
 
             m = Vector3.ClampMagnitude(m, 1);
 
             controller.Move(jumpSpeed * m * Time.deltaTime);
-        }
-        else if(sliding)
-        {
-            move = Vector3.ClampMagnitude(move, 1);
-
-            controller.Move(Speed * slideMove * Time.deltaTime);
         }
 
         //Gravity
@@ -264,8 +227,6 @@ public class PlayerController : MonoBehaviourPun
             jumpMove = move;
 
             canJump = false;
-
-            sliding = false;
 
             Invoke("JumpCooldown", 0.5f);
 
